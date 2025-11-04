@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <script>
+        const token = localStorage.getItem('userToken');
+        if (!token) {
+            // If no token is found, redirect to the login page
+            window.location.href = 'login.html';
+        }
+    </script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seasonal Alerts - ForecastX</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <script>
+        (function() {
+            const theme = localStorage.getItem('theme');
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark-mode');
+            }
+        })();
+    </script>
+    
+    <style>
+        /* Base styles */
+        :root {
+            --primary-blue: #007bff;
+            --light-blue-bg: #e0f2ff;
+            --gradient-start: #d4f0ff;
+            --gradient-end: #a9d9ff;
+            --text-primary: #333;
+            --text-secondary: #555;
+            --card-bg: #ffffff;
+            --alert-red: #d93025;
+            --alert-yellow: #f9ab00;
+            --alert-grey: #5f6368;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        /* Dark Mode Theme */
+        html.dark-mode {
+            --gradient-start: #1e3c58;
+            --gradient-end: #111827;
+            --text-primary: #f9fafb;
+            --text-secondary: #9ca3af;
+            --card-bg: #1f2937;
+            --light-blue-bg: #374151;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: var(--text-primary);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        /* --- 2. UPDATED Navigation Bar --- */
+        .navbar {
+            background-color: var(--card-bg);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 10px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-secondary);
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background-color: var(--light-blue-bg);
+            color: var(--primary-blue);
+        }
+        
+        html.dark-mode .nav-link:hover,
+        html.dark-mode .nav-link.active {
+            color: #7dd3fc;
+        }
+        
+        /* NEW: Auth Buttons in Nav */
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .btn {
+            font-family: 'Poppins', sans-serif;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: 2px solid var(--primary-blue);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-primary {
+            background-color: var(--primary-blue);
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--primary-blue);
+        }
+        .btn-secondary:hover {
+            background-color: var(--light-blue-bg);
+        }
+        html.dark-mode .btn-secondary {
+            background-color: var(--card-bg);
+            border-color: #374151;
+        }
+        html.dark-mode .btn-secondary:hover {
+            background-color: var(--light-blue-bg);
+        }
+        
+        /* NEW: Profile Icon Button */
+        .btn-icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--primary-blue);
+            color: var(--primary-blue);
+            background-color: transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+            padding: 0;
+        }
+        .btn-icon:hover {
+            background-color: var(--light-blue-bg);
+        }
+        .btn-icon svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
+        }
+        html.dark-mode .btn-icon {
+            background-color: var(--card-bg);
+            border-color: #374151;
+        }
+        html.dark-mode .btn-icon:hover {
+            background-color: var(--light-blue-bg);
+        }
+
+        /* --- 3. Main Content --- */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .main-content h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        /* Specific styles for the alerts list */
+        .alerts-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            max-width: 800px;
+        }
+        
+        .alert-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 20px 25px;
+            text-align: left;
+            transition: background-color 0.3s;
+        }
+        
+        .alert-card.severe {
+            border-left: 5px solid var(--alert-red);
+        }
+        .alert-card.moderate {
+            border-left: 5px solid var(--alert-yellow);
+        }
+        .alert-card.info {
+            border-left: 5px solid var(--alert-grey);
+        }
+        
+        .alert-card h2 {
+            font-size: 1.25rem;
+            margin-top: 0;
+            margin-bottom: 5px;
+        }
+        .alert-card.severe h2 {
+            color: var(--alert-red);
+        }
+        .alert-card.moderate h2 {
+            color: var(--alert-yellow);
+        }
+        .alert-card.info h2 {
+            color: var(--alert-grey);
+        }
+
+        .alert-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+        }
+        .alert-card .alert-info {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="dashboard.html" class="nav-link">Forecast</a>
+            <a href="alerts.html" class="nav-link active">Alerts</a>
+            <a href="https://www.google.com/maps" target="_blank" class="nav-link">Maps</a>
+            <a href="settings.html" class="nav-link">Settings</a>
+        </div>
+        <div class="auth-buttons">
+            </div>
+    </header>
+
+    <main class="main-content">
+        <h1>Seasonal Weather Patterns</h1>
+        
+        <div class="alerts-list" id="alerts-list">
+            
+            <div class="alert-card severe">
+                <h2>Chennai: Cyclone Season</h2>
+                <p>Chennai and the Tamil Nadu coast are vulnerable to cyclonic storms during the Northeast Monsoon season. Be extremely cautious if traveling during this period.</p>
+                <div class="alert-info">
+                    <strong>Typical Period:</strong> October - December
+                </div>
+            </div>
+            
+            <div class="alert-card moderate">
+                <h2>Delhi: High Pollution (Smog)</h2>
+                <p>Delhi frequently experiences severe air pollution and smog post-monsoon, peaking after Diwali. This can cause respiratory issues. Consider using air purifiers and N95 masks.</p>
+                <div class="alert-info">
+                    <strong>Typical Period:</strong> Late October - January
+                </div>
+            </div>
+
+            <div class="alert-card severe">
+                <h2>Mumbai: Monsoon Flooding</h2>
+                <p>The Southwest Monsoon brings heavy rainfall, often leading to waterlogging in low-lying areas and disruption of train services. Plan travel accordingly.</p>
+                <div class="alert-info">
+                    <strong>Typical Period:</strong> June - September
+                </div>
+            </div>
+
+            <div class="alert-card moderate">
+                <h2>North India: Heatwave</h2>
+                <p>Many parts of North and Central India, including Delhi, Rajasthan, and UP, experience extreme heatwaves before the monsoon. Temperatures can exceed 45°C.</p>
+                <div class="alert-info">
+                    <strong>Typical Period:</strong> May - June
+                </div>
+            </div>
+
+            <div class="alert-card info">
+                <h2>Himalayas: Landslide Risk</h2>
+                <p>During the monsoon season, heavy rains can trigger landslides in mountainous regions like Himachal Pradesh and Uttarakhand. Check road conditions before traveling.</p>
+                <div class="alert-info">
+                    <strong>Typical Period:</strong> July - September
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        // NEW: Authentication Check
+        (function checkLoginStatus() {
+            const token = localStorage.getItem('userToken');
+            const authButtons = document.querySelector('.auth-buttons');
+            
+            if (token) {
+                // User is LOGGED IN
+                authButtons.innerHTML = `
+                    <a href="settings.html" class="btn btn-icon" title="Profile & Settings">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                        </svg>
+                    </a>
+                    <a href="#" id="logout-btn" class="btn btn-secondary">Logout</a>
+                `;
+                
+                document.getElementById('logout-btn').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    localStorage.removeItem('userToken');
+                    localStorage.removeItem('userEmail');
+                    window.location.href = 'index.html'; // Go to home page
+                });
+            } else {
+                // User is LOGGED OUT
+                authButtons.innerHTML = `
+                    <a href="login.html" class="btn btn-primary">Sign In</a>
+                    <a href="register.html" class="btn btn-secondary">Register</a>
+                `;
+            }
+        })();
+    </script>
+</body>
+</html>

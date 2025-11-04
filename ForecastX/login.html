@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <script>
+        const token = localStorage.getItem('userToken');
+        if (token) {
+            // If a token exists, don't show the login page.
+            // Go straight to the dashboard.
+            window.location.href = 'dashboard.html';
+        }
+    </script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - ForecastX</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <script>
+        (function() {
+            const theme = localStorage.getItem('theme');
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark-mode');
+            }
+        })();
+    </script>
+    
+    <style>
+        :root {
+            --primary-blue: #007bff;
+            --light-blue-bg: #e0f2ff;
+            --gradient-start: #d4f0ff;
+            --gradient-end: #a9d9ff;
+            --text-primary: #333;
+            --text-secondary: #555;
+            --card-bg: #ffffff;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --error-red: #d93025;
+        }
+        html.dark-mode {
+            --gradient-start: #1e3c58;
+            --gradient-end: #111827;
+            --text-primary: #f9fafb;
+            --text-secondary: #9ca3af;
+            --card-bg: #1f2937;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: var(--text-primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        .form-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 30px 40px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+        .form-card h1 {
+            font-size: 1.8rem;
+            margin-top: 0;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+        .form-group input {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            padding: 12px 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        html.dark-mode .form-group input {
+            background-color: #374151;
+            border-color: #4b5563;
+            color: var(--text-primary);
+        }
+        
+        .btn {
+            font-family: 'Poppins', sans-serif;
+            width: 100%;
+            padding: 12px 20px;
+            font-size: 1rem;
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .btn:disabled {
+            background-color: #aaa;
+            cursor: not-allowed;
+        }
+        
+        #error-message {
+            font-size: 0.9rem;
+            margin-top: 15px;
+            display: none; 
+            color: var(--error-red);
+        }
+        
+        .register-link {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        .register-link a {
+            color: var(--primary-blue);
+            font-weight: 500;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-card">
+        <h1>Sign In</h1>
+        <div class="form-group">
+            <label for="email-input">Email</label>
+            <input type="email" id="email-input" placeholder="you@example.com">
+        </div>
+        <div class="form-group">
+            <label for="password-input">Password</label>
+            <input type="password" id="password-input" placeholder="Your password">
+        </div>
+        <button id="login-btn" class="btn">Log In</button>
+        
+        <p id="error-message"></p>
+        
+        <div class="register-link">
+            No account? <a href="register.html">Create one</a>
+        </div>
+    </div>
+
+    <script>
+        const emailInput = document.getElementById('email-input');
+        const passwordInput = document.getElementById('password-input');
+        const loginBtn = document.getElementById('login-btn');
+        const errorMessage = document.getElementById('error-message');
+
+        const BACKEND_URL = 'http://localhost:3000'; // Your server's URL
+
+        async function loginUser() {
+            const email = emailInput.value;
+            const password = passwordInput.value;
+
+            if (!email || !password) {
+                showMessage('Please enter email and password.');
+                return;
+            }
+
+            loginBtn.disabled = true;
+            loginBtn.textContent = 'Logging In...';
+            showMessage('');
+
+            try {
+                // 1. Send to backend
+                const response = await fetch(`${BACKEND_URL}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email, password: password })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'Login failed');
+                }
+
+                // 2. SUCCESS! Save the token AND email
+                localStorage.setItem('userToken', data.token);
+                // **** THIS IS THE LINE YOU WERE ASKING ABOUT ****
+                localStorage.setItem('userEmail', email); 
+                
+                // 3. Redirect to the main app
+                window.location.href = 'dashboard.html';
+
+            } catch (error) {
+                showMessage(error.message);
+                loginBtn.disabled = false;
+                loginBtn.textContent = 'Log In';
+            }
+        }
+
+        function showMessage(text) {
+            errorMessage.textContent = text;
+            errorMessage.style.display = 'block';
+        }
+        
+        // Add listeners
+        loginBtn.addEventListener('click', loginUser);
+        
+        passwordInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                loginUser();
+            }
+        });
+        
+        emailInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                loginUser();
+            }
+        });
+    </script>
+</body>
+</html>

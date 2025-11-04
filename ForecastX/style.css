@@ -1,0 +1,401 @@
+/* --- 1. Base & Background --- */
+:root {
+    --primary-blue: #007bff;
+    --light-blue-bg: #e0f2ff;
+    --gradient-start: #d4f0ff;
+    --gradient-end: #a9d9ff;
+    --text-primary: #333;
+    --text-secondary: #555;
+    --card-bg: #ffffff;
+    --alert-red: #d93025;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --sun-color: #FFC300;
+}
+
+/* Dark Mode Theme */
+html.dark-mode {
+    --gradient-start: #1e3c58;
+    --gradient-end: #111827;
+    --text-primary: #f9fafb;
+    --text-secondary: #9ca3af;
+    --card-bg: #1f2937;
+    --light-blue-bg: #374151;
+    --sun-color: #FFD60A;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+    color: var(--text-primary);
+    transition: background-color 0.3s, color 0.3s;
+    overflow-x: hidden; /* Prevent horizontal scroll from animations */
+}
+
+/* --- 2. Navigation Bar --- */
+.navbar {
+    background-color: var(--card-bg);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    padding: 10px 5%;
+    display: flex;
+    justify-content: space-between; /* NEW */
+    align-items: center; /* NEW */
+    transition: background-color 0.3s;
+}
+
+.nav-brand {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+html.dark-mode .nav-brand {
+    color: var(--text-primary);
+}
+
+
+.nav-links {
+    display: flex;
+    gap: 15px;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: var(--text-secondary);
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    background-color: var(--light-blue-bg);
+    color: var(--primary-blue);
+}
+
+html.dark-mode .nav-link:hover,
+html.dark-mode .nav-link.active {
+    color: #7dd3fc;
+}
+
+/* --- 3. Auth Buttons (now in nav) --- */
+.auth-buttons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.btn {
+    font-family: 'Poppins', sans-serif;
+    text-decoration: none;
+    padding: 8px 16px; /* Smaller for nav */
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: 2px solid var(--primary-blue);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-primary {
+    background-color: var(--primary-blue);
+    color: white;
+}
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: var(--primary-blue);
+}
+.btn-secondary:hover {
+    background-color: var(--light-blue-bg);
+}
+
+html.dark-mode .btn-secondary {
+    background-color: var(--card-bg);
+    border-color: #374151;
+}
+html.dark-mode .btn-secondary:hover {
+    background-color: var(--light-blue-bg);
+}
+
+/* Profile Icon Button */
+.btn-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid var(--primary-blue);
+    color: var(--primary-blue);
+    background-color: transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+    padding: 0;
+}
+.btn-icon:hover {
+    background-color: var(--light-blue-bg);
+}
+.btn-icon svg {
+    width: 22px;
+    height: 22px;
+    fill: currentColor;
+}
+html.dark-mode .btn-icon {
+    background-color: var(--card-bg);
+    border-color: #374151;
+}
+html.dark-mode .btn-icon:hover {
+    background-color: var(--light-blue-bg);
+}
+
+
+/* --- 4. NEW Hero Section --- */
+.hero-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    padding: 60px 5%;
+    min-height: 70vh;
+}
+
+.hero-content {
+    flex: 1;
+    max-width: 500px;
+    animation: slideInFromLeft 0.8s ease-out;
+}
+
+.hero-content h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.2;
+    margin: 0;
+}
+
+.hero-content .tagline {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    max-width: 450px;
+    margin: 20px 0 30px 0;
+}
+
+/* --- 5. Search Container --- */
+.search-container {
+    display: flex;
+    width: 100%;
+    max-width: 500px;
+}
+
+.search-bar {
+    flex-grow: 1;
+    padding: 14px 20px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 12px 0 0 12px;
+    outline: none;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+html.dark-mode .search-bar {
+    background-color: #374151;
+    border-color: #4b5563;
+    color: var(--text-primary);
+}
+html.dark-mode .search-bar::placeholder {
+    color: #9ca3af;
+}
+
+.search-button {
+    padding: 14px 25px;
+    font-size: 1rem;
+    font-weight: 500;
+    background-color: var(--primary-blue);
+    color: white;
+    border: none;
+    border-radius: 0 12px 12px 0;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.search-button:hover {
+    background-color: #0056b3;
+}
+
+/* --- 6. NEW Hero Animation --- */
+.hero-animation {
+    flex: 1;
+    max-width: 400px;
+    height: 300px;
+    position: relative;
+    display: none; /* Hidden on small screens */
+    animation: fadeIn 1s ease-out 0.3s;
+    animation-fill-mode: backwards;
+}
+
+@media (min-width: 900px) {
+    .hero-animation {
+        display: block; /* Show animation on larger screens */
+    }
+}
+
+.sun {
+    width: 150px;
+    height: 150px;
+    background: var(--sun-color);
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 40px 20px rgba(255, 195, 0, 0.5);
+    animation: spin 20s linear infinite;
+}
+
+.cloud {
+    width: 100px;
+    height: 35px;
+    background: #fff;
+    border-radius: 20px;
+    position: absolute;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.cloud::before, .cloud::after {
+    content: '';
+    position: absolute;
+    background: #fff;
+    border-radius: 50%;
+}
+.cloud::before {
+    width: 50px;
+    height: 50px;
+    top: -25px;
+    left: 10px;
+}
+.cloud::after {
+    width: 60px;
+    height: 60px;
+    top: -30px;
+    right: 10px;
+}
+
+.cloud-1 {
+    top: 30px;
+    left: 0;
+    opacity: 0.8;
+    animation: float 15s linear infinite;
+}
+
+.cloud-2 {
+    top: 180px;
+    left: 50px;
+    opacity: 0.6;
+    transform: scale(0.8);
+    animation: float 20s linear infinite 5s; /* 5s delay */
+}
+
+/* --- 7. Alerts Section --- */
+.alerts-section {
+    padding: 40px 5%;
+    background-color: var(--card-bg);
+    transition: background-color 0.3s;
+}
+
+.alerts-section h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 30px;
+}
+
+.alert-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.alert-card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    padding: 20px 25px;
+    text-align: left;
+    border-top: 4px solid var(--alert-red);
+    /* Remove dark mode style from here, it's handled by section */
+}
+
+html.dark-mode .alert-card {
+    background-color: #374151; /* Darker card on dark bg */
+}
+
+.alert-card h2 {
+    color: var(--alert-red);
+    font-size: 1.25rem;
+    margin-top: 0;
+}
+
+.alert-card p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+}
+
+
+/* --- 8. Animations --- */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideInFromLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes spin {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes float {
+    0% { transform: translateX(-100px) translateY(0); }
+    50% { transform: translateX(100px) translateY(-10px); }
+    100% { transform: translateX(-100px) translateY(0); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+    .hero-section {
+        flex-direction: column-reverse;
+        text-align: center;
+    }
+    .hero-content .tagline {
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .search-container {
+        justify-content: center;
+    }
+    .hero-animation {
+        display: none; /* Hide complex animation on small screens */
+    }
+    .navbar {
+        flex-direction: column;
+        gap: 10px;
+    }
+}

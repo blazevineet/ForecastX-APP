@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ForecastX - Home</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        (function() {
+            const theme = localStorage.getItem('theme');
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark-mode');
+            }
+        })();
+    </script>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="nav-brand">ForecastX 💡</div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link active">Home</a>
+            <a href="dashboard.html" class="nav-link">Forecast</a>
+            <a href="alerts.html" class="nav-link">Alerts</a>
+            <a href="http://zoom.earth" target="_blank" class="nav-link">Maps</a>
+            <a href="settings.html" class="nav-link">Settings</a>
+        </div>
+        <div class="auth-buttons">
+            </div>
+    </header>
+
+    <main>
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1>A Friendly Weather data Analysis and Prediction</h1>
+                <p class="tagline">
+                    Get accurate, real-time forecasts and travel advice.
+                    Find your location to get started.
+                </p>
+                <div class="search-container">
+                    <input type="text" class="search-bar" placeholder="Enter any city name...">
+                    <button class="search-button">Search</button>
+                </div>
+            </div>
+            <div class="hero-animation">
+                <div class="sun"></div>
+                <div class="cloud cloud-1"></div>
+                <div class="cloud cloud-2"></div>
+            </div>
+        </section>
+
+        <section class="alerts-section">
+            <h2>Latest Alerts</h2>
+            <div class="alert-grid">
+                
+                <div class="alert-card">
+                    <h2>High Pollution Alert in Delhi</h2>
+                    <p>Air Quality Index (AQI) is in the 'Severe' category. Residents are advised to wear masks and limit outdoor activity.</p>
+                </div>
+                
+                <div class="alert-card">
+                    <h2>Northeast Monsoon: Chennai</h2>
+                    <p>Heavy rainfall and strong winds expected along the coast due to the active monsoon. Watch for urban flooding.</p>
+                </div>
+                
+                <div class="alert-card">
+                    <h2>Poor Air Quality in Mumbai</h2>
+                    <p>A moderate smog is affecting visibility and air quality. Sensitive groups should take precautions.</p>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js" defer></script>
+</body>
+</html>
